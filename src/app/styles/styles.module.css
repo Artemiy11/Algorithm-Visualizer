@@ -1,0 +1,93 @@
+.arrayContainer {
+    width: 100vw;
+    height: calc(100vh - 70px);
+    padding: 2vw 5vw;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: row;
+}
+
+.arrayBar {
+    background-color: rgb(165, 80, 250);
+    width: 1vw;
+    margin: 0 2px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.arrayValue {
+    margin-top: 2px;
+    text-align: center;
+    font-size: 0.5rem;
+    font-weight: 500;
+    color: black;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    height: 60px;
+    width: 100%;
+    background-color: rgb(165, 80, 250);
+    margin-bottom: 10px;
+}
+
+.button {
+    margin-right: 5px;
+    height: 30px;
+}
+
+.rangeInput {
+    position: relative;
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e0e0e0;
+    outline: none;
+}
+
+.rangeInput::before {
+    content: attr(min);
+    position: absolute;
+    bottom: -17px;
+    text-align: center;
+    color: #fff;
+}
+
+.rangeInput::after {
+    content: attr(max);
+    position: absolute;
+    bottom: -17px;
+    right: 0;
+    text-align: center;
+    color: #fff;
+}
+
+.rangeValue {
+    position: absolute;
+    top: -15px;
+    color: #fff;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: green;
+}
+
+.stick {
+    height: 40px;
+    width: 1px;
+    background-color: #fff;
+    margin-right: 10px;
+    margin-left: 5px;
+}
