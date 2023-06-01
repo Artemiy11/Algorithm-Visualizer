@@ -28,7 +28,7 @@ const SortingVisualizer = () => {
     }
   }, [arrayLength, array.length]);
 
-  function resetArray() {
+  async function resetArray() {
     let array = [];
     for (let i = 0; i < arrayLength; i++) {
       array.push(randomIntFromInterval(50, 900));
@@ -57,20 +57,20 @@ const SortingVisualizer = () => {
         "B",
       ];
       const note = noteNames[noteIndex];
-      console.log("note:", note);
+      // console.log("note:", note);
       return `${note}${octave}`;
     }
 
     const tonality = getTonalityFromNumber(noteNumber);
     const duration = swapIndex % 2 === 0 ? "8n" : "16n";
     const synth = new Tone.PolySynth(Tone.Synth).toDestination();
-    // await Tone.start();
+    await Tone.start();
     Tone.loaded().then(() => {
       synth.triggerAttackRelease(tonality, duration);
     });
   };
 
-  function animateArray(iterations: number[][] = [], dots: number[][] = []) {
+  function animateArray(iterations: number[][] = [], dots: number[][] = []) {  
     const animateSpeed = 2000 / arrayLength;
     const arrayHtml = document.querySelector("#array");
     setPending(true);
@@ -97,24 +97,37 @@ const SortingVisualizer = () => {
     }
   }
 
+  function handleArraySorting(sort: any) {
+    if (isArraySorted(array)) {
+      let newArray = [];
+      for (let i = 0; i < arrayLength; i++) {
+        newArray.push(randomIntFromInterval(50, 900));
+      }
+      setArray(newArray);
+      const { iterations, dots } = sort([...newArray]);
+      animateArray(iterations, dots);
+    } else {
+      const { iterations, dots } = sort([...array]);
+      animateArray(iterations, dots);
+    }
+  }
+
   function mergeSort() {
-    const { iterations, dots } = sortingAlgorithms.mergeSort([...array]);
-    animateArray(iterations, dots);
+    handleArraySorting(sortingAlgorithms.mergeSort);
   }
 
   function heapSort() {
-    const { iterations, dots } = sortingAlgorithms.heapSort([...array]);
-    animateArray(iterations, dots);
+    handleArraySorting(sortingAlgorithms.heapSort);
   }
-
-  function bubbleSort() {
-    const { iterations, dots } = sortingAlgorithms.bubbleSort([...array]);
-    animateArray(iterations, dots);
+  
+  async function bubbleSort() {
+    handleArraySorting(sortingAlgorithms.bubbleSort);
   }
+  
+  
 
   function quickSort() {
-    const { iterations, dots } = sortingAlgorithms.quickSort([...array]);
-    animateArray(iterations, dots);
+    handleArraySorting(sortingAlgorithms.quickSort)
   }
 
   return (
@@ -163,6 +176,7 @@ const SortingVisualizer = () => {
         </button>
         <div style={{ position: "relative" }}>
           <input
+            disabled={pending}
             type="range"
             id="min"
             min={10}
@@ -194,6 +208,22 @@ const SortingVisualizer = () => {
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function isArraySorted(array: number[]) {
+  const sortedArray: number[] = [];
+  array.forEach((value, index) => (sortedArray[index] = value));
+  sortedArray.sort((a, b) => a - b);
+
+  console.log(array, sortedArray);
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] !== sortedArray[i]) {
+      console.log("Массив не отсортирован");
+      return false;
+    }
+  }
+  console.log("Массив отсортирован");
+  return true;
 }
 
 export default SortingVisualizer;
